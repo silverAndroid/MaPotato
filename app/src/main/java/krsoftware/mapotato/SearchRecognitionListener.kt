@@ -8,7 +8,8 @@ import android.speech.SpeechRecognizer
  * Created by kkung on 2017-09-30.
  */
 
-class SearchRecognitionListener : RecognitionListener{
+class SearchRecognitionListener(val updateResults: (String?) -> Unit) : RecognitionListener{
+    var results : ArrayList<String>? = null
     override fun onReadyForSpeech(p0: Bundle?) {
         println("Ready For Speech")
     }
@@ -41,9 +42,10 @@ class SearchRecognitionListener : RecognitionListener{
         println("Error" + p0)
     }
 
-    override fun onResults(results: Bundle?) {
-        var arrayResults: ArrayList<String>? = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        println(arrayResults)
+    override fun onResults(bundleResults: Bundle?) {
+        results = bundleResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+        updateResults(results?.get(0))
+
     }
 
 }

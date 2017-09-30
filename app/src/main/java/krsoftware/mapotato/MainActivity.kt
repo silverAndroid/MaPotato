@@ -22,25 +22,24 @@ class MainActivity : AppCompatActivity() {
         requestSpeechPermissionWithPermissionCheck()
 
         val speechRecognizer : SpeechRecognizer  = SpeechRecognizer.createSpeechRecognizer(this.applicationContext)
-        speechRecognizer.setRecognitionListener(SearchRecognitionListener())
+        speechRecognizer.setRecognitionListener(SearchRecognitionListener(this::updateResults))
 
         val speechIntent : Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en")
+
         this.speech_button.setOnClickListener {
             speechRecognizer.startListening(speechIntent)
-        }
-
-        this.speech_done.setOnClickListener {
-            speechRecognizer.stopListening()
         }
     }
 
     @NeedsPermission(Manifest.permission.RECORD_AUDIO)
     fun requestSpeechPermission() {
-
     }
 
+    fun updateResults(result: String?) {
+        this.text_results.text = result
+    }
 
 
 }
