@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+Properties properties = new Properties()
+File propertiesFile = rootProject.file('secret.properties')
+properties.load(new FileInputStream(propertiesFile))
+
+def keys = ['API_KEY']
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -14,6 +20,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes.each { buildType ->
+        keys.forEach { key ->
+            buildType.buildConfigField('String', key, properties[key])
+        }
     }
     buildTypes {
         release {
