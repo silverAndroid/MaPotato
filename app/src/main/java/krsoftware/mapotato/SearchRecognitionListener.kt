@@ -3,13 +3,13 @@ package krsoftware.mapotato
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by kkung on 2017-09-30.
  */
 
-class SearchRecognitionListener(val updateResults: (String?) -> Unit) : RecognitionListener{
-    var results : ArrayList<String>? = null
+class SearchRecognitionListener(private val updateResults: PublishSubject<String>) : RecognitionListener {
     override fun onReadyForSpeech(p0: Bundle?) {
         println("Ready For Speech")
     }
@@ -38,14 +38,14 @@ class SearchRecognitionListener(val updateResults: (String?) -> Unit) : Recognit
         println("End of Speech")
     }
 
-    override fun onError(p0: Int) {
-        println("Error" + p0)
+    override fun onError(errorCode: Int) {
+        println("Error $errorCode")
     }
 
     override fun onResults(bundleResults: Bundle?) {
-        results = bundleResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        updateResults(results?.get(0))
-
+        val results = bundleResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+        results?.let {
+            updateResults.onNext(results[0])
+        }
     }
-
 }

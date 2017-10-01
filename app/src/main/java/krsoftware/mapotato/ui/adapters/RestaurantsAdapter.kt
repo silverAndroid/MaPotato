@@ -1,9 +1,11 @@
-package krsoftware.mapotato
+package krsoftware.mapotato.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import krsoftware.mapotato.R
+import krsoftware.mapotato.inflate
 import krsoftware.mapotato.model.Place
 
 /**
