@@ -1,48 +1,49 @@
-package krsoftware.mapotato.ui
+package krsoftware.mapotato.ui.activities
 
-import android.Manifest
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.facebook.drawee.backends.pipeline.Fresco
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
-import kotlinx.android.synthetic.main.activity_main.*
-import krsoftware.mapotato.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import krsoftware.mapotato.R
+import krsoftware.mapotato.showFragment
 import krsoftware.mapotato.ui.fragments.RestaurantsFragment
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.RuntimePermissions
+import krsoftware.mapotato.ui.fragments.SpeechFragment
+import java.lang.IllegalStateException
 
-@RuntimePermissions
 class MainActivity : AppCompatActivity() {
+    private val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Fresco.initialize(this)
-//        showRestaurantsFragment("Google")
-        requestSpeechPermissionWithPermissionCheck()
+        showSpeechFragment()
     }
 
     private fun showRestaurantsFragment(query: String) {
         showFragment(RestaurantsFragment.newInstance(query), true, "RestaurantsFragment")
     }
 
-    @NeedsPermission(Manifest.permission.RECORD_AUDIO)
-    fun requestSpeechPermission() {
-        val speechRecognizer : SpeechRecognizer  = SpeechRecognizer.createSpeechRecognizer(this.applicationContext)
-        speechRecognizer.setRecognitionListener(SearchRecognitionListener(this::updateResults))
-
-        val speechIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en")
-
-        this.speech_button.setOnClickListener {
-            speechRecognizer.startListening(speechIntent)
-        }
+    private fun showSpeechFragment() {
+        val fragment = SpeechFragment.newInstance()
+        fragment.getSpeechListener()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.single())
+                .subscribe({
+                    try {
+                        Log.d(TAG, "Speech returned $it")
+                        showRestaurantsFragment(it)
+                    } catch (e: IllegalStateException) {
+                        // ignore
+                    }
+                }, this::onSubscriptionError)
+        showFragment(fragment)
     }
 
-    private fun updateResults(result: String?) {
-        this.text_results.text = result
+    private fun onSubscriptionError(e: Throwable) {
+        throw RuntimeException(e)
     }
 }

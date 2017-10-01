@@ -1,4 +1,4 @@
-package krsoftware.mapotato
+package krsoftware.mapotato.ui.fragments
 
 
 import android.animation.Animator
@@ -14,6 +14,10 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_restaurants.*
+import krsoftware.mapotato.R
+import krsoftware.mapotato.ui.adapters.RestaurantsAdapter
+import krsoftware.mapotato.StatusEnum
+import krsoftware.mapotato.inflate
 import krsoftware.mapotato.model.Place
 import krsoftware.mapotato.retrofit.MapsAPIService
 
@@ -31,9 +35,9 @@ class RestaurantsFragment : Fragment() {
         query = arguments.getString(ARG_QUERY)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater?.inflate(R.layout.fragment_restaurants, container, false)
+        return container?.inflate(R.layout.fragment_restaurants, inflater = inflater)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
