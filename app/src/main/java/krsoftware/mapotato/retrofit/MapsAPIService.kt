@@ -13,7 +13,7 @@ import retrofit2.http.Query
 /**
  * Created by silver_android on 30/09/17.
  */
-class MapsAPIService {
+class MapsAPIService private constructor() {
     private val api: MapsAPI
 
     init {
@@ -30,5 +30,9 @@ class MapsAPIService {
     interface MapsAPI {
         @GET("/maps/api/place/nearbysearch/json")
         fun search(@Query("keyword") query: String, @Query("location") location: String = "123.45,231.45", @Query("radius") radius: Int, @Query("key") key: String = BuildConfig.API_KEY) : Single<SearchResults>
+    }
+
+    companion object {
+        val instance: MapsAPIService = MapsAPIService()
     }
 }

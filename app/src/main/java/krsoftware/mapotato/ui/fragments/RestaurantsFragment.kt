@@ -25,7 +25,7 @@ import krsoftware.mapotato.retrofit.MapsAPIService
  * A simple [Fragment] subclass.
  */
 class RestaurantsFragment : Fragment() {
-    private val mapsAPI: MapsAPIService = MapsAPIService()
+    private val mapsAPI: MapsAPIService = MapsAPIService.instance
     private lateinit var query: String
     private lateinit var adapter: RestaurantsAdapter
 
