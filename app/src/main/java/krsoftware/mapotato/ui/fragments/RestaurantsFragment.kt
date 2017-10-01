@@ -41,14 +41,10 @@ class RestaurantsFragment : Fragment() {
     private lateinit var query: String
     private lateinit var adapter: RestaurantsAdapter
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
-    private var mLocation: Location = Location(Context.LOCATION_SERVICE)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         query = arguments.getString(ARG_QUERY)
-        mLocation.latitude = 45.4276550
-        mLocation.longitude = -75.6824510
         getLocationWithPermissionCheck()
     }
 
@@ -60,19 +56,7 @@ class RestaurantsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mapsAPI.search(query, 5000, mLocation.toString())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    when (StatusEnum.valueOf(response.status)) {
-                        StatusEnum.OK, StatusEnum.ZERO_RESULTS -> {
-                            updateSearchResults(response.results.map { it.toModel() })
-                        }
-                        StatusEnum.OVER_QUERY_LIMIT, StatusEnum.INVALID_REQUEST, StatusEnum.REQUEST_DENIED -> {
-                            Toast.makeText(context, response.error_message ?: "An error occurred", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }, this::onNetworkError)
+
     }
 
     private fun updateSearchResults(results: List<Place>) {
@@ -123,11 +107,31 @@ class RestaurantsFragment : Fragment() {
         mFusedLocationProviderClient.getLastLocation()
                 .addOnSuccessListener(this.activity, { location ->
                     if (location != null) {
-                        mLocation = location
+                        queryMaps(location = location)
                     } else {
                         //no location no search is done, will handle this case in the future.
+                        var location: Location = Location(Context.LOCATION_SERVICE)
+                        location.longitude = 0.0
+                        location.latitude = 0.0
+                        queryMaps(6383*1000, location)
                     }
                 })
+    }
+
+    fun queryMaps(radius: Int = 5000, location: Location) {
+        mapsAPI.search(query, radius, "${location.latitude},${location.longitude}")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ response ->
+                    when (StatusEnum.valueOf(response.status)) {
+                        StatusEnum.OK, StatusEnum.ZERO_RESULTS -> {
+                            updateSearchResults(response.results.map { it.toModel() })
+                        }
+                        StatusEnum.OVER_QUERY_LIMIT, StatusEnum.INVALID_REQUEST, StatusEnum.REQUEST_DENIED -> {
+                            Toast.makeText(context, response.error_message ?: "An error occurred", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }, this::onNetworkError)
     }
 
     companion object {
