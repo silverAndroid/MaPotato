@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.facebook.drawee.view.SimpleDraweeView
+import krsoftware.mapotato.BuildConfig
 import krsoftware.mapotato.R
 import krsoftware.mapotato.inflate
 import krsoftware.mapotato.model.Place
@@ -17,7 +19,8 @@ class RestaurantsAdapter(private val restaurants: List<Place>): RecyclerView.Ada
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         val restaurant = restaurants[position]
         with (restaurant) {
-            holder.bind(name, address)
+            val imageURL = "https://maps.googleapis.com/maps/api/place/photo?key=${BuildConfig.API_KEY}&photoreference=${photos?.get(0)?.photo_reference}&maxwidth=400"
+            holder.bind(name, address, imageURL)
         }
     }
 
@@ -26,10 +29,16 @@ class RestaurantsAdapter(private val restaurants: List<Place>): RecyclerView.Ada
     inner class RestaurantViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {
         private val name: TextView = containerView.findViewById(R.id.name)
         private val address: TextView = containerView.findViewById(R.id.address)
+        private val image: SimpleDraweeView = containerView.findViewById(R.id.image)
 
-        fun bind(name: String, address: String) {
+        fun bind(name: String, address: String, imageURL: String?) {
             this.name.text = name
             this.address.text = address
+            if (imageURL == null) {
+                // add picture of potato
+            } else {
+                this.image.setImageURI(imageURL)
+            }
         }
     }
 }
