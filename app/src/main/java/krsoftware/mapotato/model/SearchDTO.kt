@@ -5,7 +5,7 @@ package krsoftware.mapotato.model
  */
 data class SearchResults(val results: List<PlaceDTO>, val status: String, val error_message: String?, val next_page_token: String?)
 
-data class PlaceDTO(val photos: List<PhotoDTO>?, val rating: Double, val name: String, val place_id: String, val vicinity: String) {
+data class PlaceDTO(val photos: List<PhotoDTO>?, val rating: Float, val name: String, val place_id: String, val vicinity: String) {
     constructor(place: Place) : this(place.photos, place.rating, place.name, place.placeID, place.address)
 
     fun toModel(): Place = Place(photos, rating, name, place_id, vicinity)
