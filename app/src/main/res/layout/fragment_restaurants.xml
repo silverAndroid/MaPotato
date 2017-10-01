@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="krsoftware.mapotato.RestaurantsFragment">
+    tools:context="krsoftware.mapotato.ui.fragments.RestaurantsFragment">
 
     <ProgressBar
         android:id="@+id/loading_indicator"
