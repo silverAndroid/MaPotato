@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_speech.*
 import krsoftware.mapotato.R
@@ -30,7 +31,6 @@ class SpeechFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initializeSpeechEngineWithPermissionCheck()
     }
 
@@ -44,6 +44,8 @@ class SpeechFragment : Fragment() {
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en")
 
         this.speech_button.setOnClickListener {
+            val animationShake = AnimationUtils.loadAnimation(this.context, R.anim.animation_shake)
+            view?.startAnimation(animationShake)
             speechRecognizer.startListening(speechIntent)
         }
     }

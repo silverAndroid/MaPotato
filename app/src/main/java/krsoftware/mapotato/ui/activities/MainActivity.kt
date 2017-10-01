@@ -3,9 +3,12 @@ package krsoftware.mapotato.ui.activities
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.facebook.drawee.backends.pipeline.Fresco
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_speech.*
 import krsoftware.mapotato.R
 import krsoftware.mapotato.showFragment
 import krsoftware.mapotato.ui.fragments.RestaurantsFragment
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe({
                     try {
                         Log.d(TAG, "Speech returned $it")
+                        fragment.speech_button.clearAnimation()
                         showRestaurantsFragment(it)
                     } catch (e: IllegalStateException) {
                         // ignore
