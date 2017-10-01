@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.4'
+    implementation 'me.zhanghai.android.materialratingbar:library:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation("com.github.hotchemi:permissionsdispatcher:${permission_dispatcher_version}") {
         // if you don't use android.app.Fragment you can exclude support for them
@@ -60,7 +61,6 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
 }
 
 kapt {
