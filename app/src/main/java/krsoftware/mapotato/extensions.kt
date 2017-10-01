@@ -11,7 +11,7 @@ import android.view.ViewGroup
  * Created by silver_android on 30/09/17.
  */
 
-fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(resource, this, attachToRoot)
+fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false, inflater: LayoutInflater = LayoutInflater.from(context)): View = inflater.inflate(resource, this, attachToRoot)
 
 fun AppCompatActivity.showFragment(fragment: Fragment, addToStack: Boolean = false, name: String? = "") {
     val transaction = supportFragmentManager.beginTransaction()
