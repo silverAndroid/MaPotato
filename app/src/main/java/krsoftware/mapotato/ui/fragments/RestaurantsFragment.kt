@@ -109,11 +109,11 @@ class RestaurantsFragment : Fragment() {
                     if (location != null) {
                         queryMaps(location = location)
                     } else {
-                        //no location no search is done, will handle this case in the future.
+                        //search will be done at 0,0; will handle this case with IP in the future.
                         var location: Location = Location(Context.LOCATION_SERVICE)
                         location.longitude = 0.0
                         location.latitude = 0.0
-                        queryMaps(6383*1000, location)
+                        queryMaps(50000, location)
                     }
                 })
     }
