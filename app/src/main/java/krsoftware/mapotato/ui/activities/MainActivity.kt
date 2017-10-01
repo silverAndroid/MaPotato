@@ -1,4 +1,4 @@
-package krsoftware.mapotato
+package krsoftware.mapotato.ui
 
 import android.Manifest
 import android.content.Intent
@@ -8,14 +8,13 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import kotlinx.android.synthetic.main.activity_main.*
+import krsoftware.mapotato.*
+import krsoftware.mapotato.ui.fragments.RestaurantsFragment
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
 class MainActivity : AppCompatActivity() {
-
-    private val MY_PERMISSIONS_RECORD_AUDIO = 1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,9 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateResults(result: String?) {
+    private fun updateResults(result: String?) {
         this.text_results.text = result
     }
-
-
 }
