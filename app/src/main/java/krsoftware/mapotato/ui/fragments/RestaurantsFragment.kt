@@ -53,12 +53,6 @@ class RestaurantsFragment : Fragment() {
         return container?.inflate(R.layout.fragment_restaurants, inflater = inflater)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
-
     private fun updateSearchResults(results: List<Place>) {
         showProgress(false)
 
@@ -104,13 +98,13 @@ class RestaurantsFragment : Fragment() {
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun getLocation() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.activity)
-        mFusedLocationProviderClient.getLastLocation()
+        mFusedLocationProviderClient.lastLocation
                 .addOnSuccessListener(this.activity, { location ->
                     if (location != null) {
                         queryMaps(location = location)
                     } else {
                         //search will be done at 0,0; will handle this case with IP in the future.
-                        var location: Location = Location(Context.LOCATION_SERVICE)
+                        val location = Location(Context.LOCATION_SERVICE)
                         location.longitude = 0.0
                         location.latitude = 0.0
                         queryMaps(50000, location)
@@ -118,7 +112,7 @@ class RestaurantsFragment : Fragment() {
                 })
     }
 
-    fun queryMaps(radius: Int = 5000, location: Location) {
+    private fun queryMaps(radius: Int = 5000, location: Location) {
         mapsAPI.search(query, radius, "${location.latitude},${location.longitude}")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
