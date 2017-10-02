@@ -4,15 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
+    <ImageButton
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_gravity="center_vertical"
         android:id="@+id/speech_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speak" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/happy_potato"
+        android:background="@android:color/transparent" />
 
-    <TextView
-        android:id="@+id/text_results"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Results" />
 </LinearLayout>
